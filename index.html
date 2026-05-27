@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindlytics - Intelligence for the Sovereign Creator</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9963A;--gold-b:#E8B95A;--gold-dim:rgba(201,150,58,0.12);--gold-mid:rgba(201,150,58,0.28);
+  --teal:#2DD4BF;--green:#3DAA6E;--red:#E05252;
+  --serif:Georgia,"Times New Roman",serif;
+  --mono:Consolas,"Courier New",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#09090F;--bg2:#0F1018;--bg3:#161720;--bg4:#1D1E2A;
+  --text1:#EDE8E0;--text2:#9C9890;--text3:#5A5750;
+  --border:rgba(201,150,58,0.08);--border2:rgba(201,150,58,0.18);
+  --card-bg:#0D0E16;--card-hover:#141520;
+  --overlay:rgba(9,9,15,0.94);
+}
+[data-theme="light"]{
+  --bg:#F5F1EA;--bg2:#ECE7DE;--bg3:#E3DDD4;
+  --text1:#141210;--text2:#4A4640;--text3:#8A857E;
+  --border:rgba(201,150,58,0.12);--border2:rgba(201,150,58,0.28);
+  --card-bg:#FEFCF8;--card-hover:#F5F0E5;
+  --overlay:rgba(245,241,234,0.95);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);font-size:15px;line-height:1.65;color:var(--text1);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--gold);text-decoration:none}
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-b));z-index:9999;width:0;transition:width 40ms linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--overlay);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-logo{font-family:var(--serif);font-size:19px;color:var(--gold)}
+.nav-links{display:flex;align-items:center}
+.nav-link{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);text-decoration:none;padding:16px 11px;transition:color 0.2s}
+.nav-link:hover{color:var(--text1)}
+.nav-link.active{color:var(--gold)}
+#themeBtn{background:none;border:1px solid var(--border2);color:var(--text2);cursor:pointer;padding:4px 10px;font-family:var(--mono);font-size:10px;border-radius:3px;transition:all 0.2s;margin-left:8px}
+#themeBtn:hover{border-color:var(--gold);color:var(--gold)}
+.sec{max-width:1100px;margin:0 auto;padding:56px 32px}
+.sec-border{border-top:1px solid var(--border)}
+.sec-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec-h{font-family:var(--serif);font-size:clamp(24px,3.5vw,38px);color:var(--text1);margin-bottom:10px;line-height:1.1}
+.sec-p{font-size:14px;color:var(--text2);max-width:580px;line-height:1.8;margin-bottom:28px}
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:52px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:72px 72px;opacity:0.35;mask-image:radial-gradient(ellipse 80% 60% at 60% 50%,black 30%,transparent 100%)}
+.hero-inner{max-width:1100px;margin:0 auto;padding:56px 32px;position:relative;z-index:1}
+.hero-eye{font-family:var(--mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);padding:5px 14px 5px 9px;border:1px solid var(--gold-mid);background:var(--gold-dim);margin-bottom:18px;border-radius:2px}
+.bdot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-h1{font-family:var(--serif);font-size:clamp(38px,6.5vw,72px);color:var(--text1);line-height:1.02;margin-bottom:6px}
+.hero-h1 em{color:var(--gold);font-style:italic}
+.hero-sub{font-family:var(--serif);font-size:clamp(15px,2vw,19px);color:var(--text2);margin-bottom:16px;font-style:italic}
+.hero-desc{font-size:15px;color:var(--text2);max-width:520px;line-height:1.8;margin-bottom:32px}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.btn-gold{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:12px 28px;background:var(--gold);color:#09090F;border:none;cursor:pointer;font-weight:700;transition:all 0.2s;border-radius:2px;text-decoration:none;display:inline-block}
+.btn-gold:hover{background:var(--gold-b)}
+.btn-out{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:11px 24px;background:none;color:var(--text2);border:1px solid var(--border2);cursor:pointer;transition:all 0.2s;border-radius:2px;text-decoration:none;display:inline-block}
+.btn-out:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{display:flex;gap:44px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border)}
+.stat-n{font-family:var(--serif);font-size:34px;color:var(--gold);display:block;line-height:1}
+.stat-l{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-top:3px;display:block}
+/* SEARCH */
+#search{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.si{max-width:1100px;margin:0 auto;padding:44px 32px}
+.sh{font-family:var(--serif);font-size:clamp(20px,2.8vw,30px);color:var(--text1);margin-bottom:6px}
+.sp{font-size:13.5px;color:var(--text2);max-width:500px;line-height:1.75;margin-bottom:20px}
+.sbox-w{position:relative;max-width:740px;margin-bottom:12px}
+.sbox{width:100%;padding:14px 120px 14px 16px;background:var(--bg);border:1px solid var(--border2);color:var(--text1);font-family:var(--sans);font-size:14px;border-radius:3px;outline:none;transition:border-color 0.2s}
+.sbox:focus{border-color:var(--gold)}
+.sbox::placeholder{color:var(--text3)}
+.sgo{position:absolute;right:5px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:var(--gold);color:#09090F;border:none;cursor:pointer;border-radius:2px;font-weight:700;transition:all 0.2s}
+.sgo:hover{background:var(--gold-b)}
+.ptags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.ptag{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);color:var(--text3);border-radius:2px;cursor:pointer;background:none;transition:all 0.2s}
+.ptag.on{border-color:var(--gold-mid);color:var(--gold);background:var(--gold-dim)}
+.lrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.llbl{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.lbtn{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;padding:4px 9px;border:1px solid var(--border);color:var(--text3);cursor:pointer;background:none;border-radius:2px;transition:all 0.2s}
+.lbtn.on{border-color:var(--gold-mid);color:var(--gold);background:var(--gold-dim)}
+.snote{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;color:var(--text3)}
+.sres{margin-top:16px;display:none}
+.sres.show{display:block}
+.srh{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.srgrid{display:flex;flex-direction:column;gap:2px;background:var(--border);border:1px solid var(--border)}
+.sri{background:var(--card-bg);padding:14px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;cursor:pointer;transition:background 0.15s}
+.sri:hover{background:var(--card-hover)}
+.spl{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid}
+.spl.yt{color:#FF6B6B;border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.07)}
+.spl.sp{color:#1DB954;border-color:rgba(29,185,84,0.3);background:rgba(29,185,84,0.07)}
+.spl.ap{color:#A78BFA;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.07)}
+.sti{font-family:var(--serif);font-size:15px;color:var(--text1);margin-bottom:2px}
+.sme{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.06em}
+.sac{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+/* PATHWAY */
+#pathway{background:var(--bg)}
+.play{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.pmb{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);padding:4px 12px 4px 9px;border:1px solid rgba(45,212,191,0.25);background:rgba(45,212,191,0.06);border-radius:2px}
+.psteps{display:flex;flex-direction:column;gap:10px;max-width:380px;margin-top:12px}
+.pst{display:flex;gap:10px;align-items:flex-start}
+.psn{font-family:var(--mono);font-size:16px;color:var(--gold);flex-shrink:0;line-height:1.2}
+.pstit{font-family:var(--serif);font-size:14px;color:var(--text1);margin-bottom:1px}
+.pssub{font-size:12px;color:var(--text2)}
+.pcard{background:var(--bg2);border:1px solid var(--border);padding:28px;border-radius:2px}
+.pctit{font-family:var(--serif);font-size:18px;color:var(--text1);margin-bottom:16px}
+.pinps{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.prow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pinp,.psel{width:100%;padding:9px 12px;background:var(--bg);border:1px solid var(--border);color:var(--text1);font-family:var(--sans);font-size:13px;border-radius:2px;outline:none;transition:border-color 0.2s}
+.pinp:focus,.psel:focus{border-color:var(--gold)}
+.pinp::placeholder{color:var(--text3)}
+.psel option{background:var(--bg3)}
+.ptarea{width:100%;min-height:72px;padding:9px 12px;background:var(--bg);border:1px solid var(--border);color:var(--text1);font-family:var(--sans);font-size:13px;resize:vertical;border-radius:2px;outline:none;line-height:1.55;transition:border-color 0.2s}
+.ptarea:focus{border-color:var(--gold)}
+.ptarea::placeholder{color:var(--text3)}
+.fnote{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;color:var(--text3);padding:8px 12px;border:1px solid var(--border);border-radius:2px;margin-bottom:12px;line-height:1.6}
+.fnote b{color:var(--gold)}
+.gbtn{width:100%;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;padding:13px;background:var(--gold);color:#09090F;border:none;cursor:pointer;font-weight:700;transition:all 0.2s;border-radius:2px}
+.gbtn:hover{background:var(--gold-b)}
+.gbtn:disabled{opacity:0.4;cursor:not-allowed}
+.rgen{padding:24px;text-align:center;display:none}
+.rgen.show{display:block}
+.rspin{width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rgtxt{font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text2)}
+.rwrap{display:none;margin-top:32px}
+.rwrap.show{display:block}
+.rhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.rtit{font-family:var(--serif);font-size:16px;color:var(--text1)}
+.rstat{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3)}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
+.htabs{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:14px;background:var(--bg3);padding:3px;border-radius:3px}
+.htab{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 10px;background:none;border:none;color:var(--text3);cursor:pointer;transition:all 0.2s;border-radius:2px;flex:1;text-align:center;white-space:nowrap}
+.htab.on{background:var(--gold);color:#09090F;font-weight:700}
+.htab:hover:not(.on):not(.lk){color:var(--text1)}
+.htab.lk{opacity:0.4;cursor:pointer}
+.htab.lk::after{content:" lock"}
+.btiers{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.btier{background:var(--card-bg);border:1px solid var(--border);padding:16px;border-radius:2px}
+.btier.lkt{opacity:0.4}
+.tierlbl{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.tierp{font-family:var(--serif);font-size:18px;color:var(--gold);margin-bottom:8px}
+.tierli{font-size:12.5px;color:var(--text2);line-height:1.7}
+.tierli li{list-style:none;padding-left:14px;position:relative;margin-bottom:2px}
+.tierli li::before{content:"-> ";position:absolute;left:0;color:var(--gold);font-size:10px}
+.upbanner{margin-top:14px;padding:14px 18px;background:var(--gold-dim);border:1px solid var(--gold-mid);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-radius:2px}
+.uptxt{font-size:13px;color:var(--text1)}
+.uptxt b{color:var(--gold)}
+.upbtn{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 20px;background:var(--gold);color:#09090F;border:none;cursor:pointer;font-weight:700;border-radius:2px;transition:all 0.2s;white-space:nowrap}
+.upbtn:hover{background:var(--gold-b)}
+/* AI */
+#ai{background:var(--bg2)}
+.aic{background:var(--card-bg);border:1px solid var(--border);padding:28px}
+.mtabs{display:flex;gap:5px;margin-bottom:20px;flex-wrap:wrap}
+.mtab{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 14px;background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.2s;border-radius:2px}
+.mtab:hover{border-color:var(--text3);color:var(--text2)}
+.mtab.on{background:var(--gold-dim);border-color:var(--gold-mid);color:var(--gold)}
+.aiinp{width:100%;min-height:88px;background:var(--bg2);border:1px solid var(--border);color:var(--text1);font-family:var(--sans);font-size:14px;padding:14px;resize:vertical;margin-bottom:10px;line-height:1.6;border-radius:2px;outline:none;transition:border-color 0.2s}
+.aiinp:focus{border-color:var(--gold)}
+.aiinp::placeholder{color:var(--text3)}
+.aisub{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:11px 26px;background:var(--gold);color:#09090F;border:none;cursor:pointer;font-weight:700;transition:all 0.2s;border-radius:2px}
+.aisub:hover{background:var(--gold-b)}
+.aisub:disabled{opacity:0.4;cursor:not-allowed}
+.aires{background:var(--bg2);border:1px solid var(--border);padding:22px;margin-top:18px;border-radius:2px}
+.airesh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.airest{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3)}
+.aist{width:6px;height:6px;border-radius:50%;background:var(--text3)}
+.aist.active{background:var(--green);animation:blink 1.5s infinite}
+.aiout{font-size:14px;line-height:1.82;color:var(--text2);white-space:pre-wrap;font-family:var(--sans)}
+.aichips{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.achip{font-family:var(--mono);font-size:9px;padding:5px 12px;background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.2s;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase}
+.achip:hover{border-color:var(--gold);color:var(--gold)}
+/* TOOLS */
+#tools{background:var(--bg)}
+.tbar{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.tsrch{flex:1;min-width:180px;background:var(--bg2);border:1px solid var(--border);color:var(--text1);font-family:var(--sans);font-size:13px;padding:8px 14px;border-radius:2px;outline:none;transition:border-color 0.2s}
+.tsrch:focus{border-color:var(--gold)}
+.tsrch::placeholder{color:var(--text3)}
+.tflt{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 12px;background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.2s;border-radius:2px}
+.tflt:hover{border-color:var(--text3)}
+.tflt.on{background:var(--gold-dim);border-color:var(--gold-mid);color:var(--gold)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)}
+.tc{background:var(--card-bg);padding:20px;cursor:pointer;position:relative;overflow:hidden;transition:background 0.2s}
+.tc::after{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.25s}
+.tc:hover{background:var(--card-hover)}
+.tc:hover::after{transform:scaleX(1)}
+.tcat{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px}
+.tcat.ai{color:var(--teal)}.tcat.video{color:#A78BFA}.tcat.content{color:var(--gold-b)}.tcat.income{color:var(--green)}.tcat.growth{color:#F472B6}
+.tname{font-family:var(--serif);font-size:18px;color:var(--text1);margin-bottom:8px}
+.tdesc{font-size:12.5px;line-height:1.68;color:var(--text2)}
+.tfoot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.tstars{font-family:var(--mono);font-size:11px;color:var(--gold)}
+.tlink{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);border:1px solid var(--border);padding:4px 9px;border-radius:2px;transition:all 0.2s}
+.tlink:hover{color:var(--gold);border-color:var(--gold)}
+/* SKILLS */
+#skills{background:var(--bg2)}
+.pwlist{display:flex;flex-direction:column;gap:2px;background:var(--border);border:1px solid var(--border)}
+.pw{background:var(--card-bg);padding:16px 22px;display:grid;grid-template-columns:44px 1fr auto;gap:16px;align-items:center;cursor:pointer;transition:background 0.2s}
+.pw:hover{background:var(--card-hover)}
+.pwn{font-family:var(--serif);font-size:26px;color:var(--text3);transition:color 0.2s}
+.pw:hover .pwn{color:var(--gold)}
+.pwt{font-family:var(--serif);font-size:15px;color:var(--text1);margin-bottom:3px}
+.pwm{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--text3);text-transform:uppercase;display:flex;gap:12px}
+.pwrt{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:90px}
+.pbar{width:90px;height:2px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.pfill{height:100%;background:var(--gold);border-radius:2px}
+.pplbl{font-family:var(--mono);font-size:9px;color:var(--text3)}
+.pwarr{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.pw:hover .pwarr{color:var(--gold)}
+.pwdet{display:none;background:var(--bg3);padding:14px 22px 14px 82px;border-top:1px solid var(--border)}
+.pwdet.show{display:block}
+.pwdtxt{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:10px}
+.pwdact{display:flex;gap:8px;flex-wrap:wrap}
+.pwabtn{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:6px 12px;background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all 0.2s;border-radius:2px}
+.pwabtn:hover{border-color:var(--gold);color:var(--gold)}
+/* INCOME */
+#income{background:var(--bg)}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);margin-bottom:20px}
+.ic{background:var(--card-bg);padding:16px;cursor:pointer;transition:background 0.2s;position:relative;text-align:center}
+.ic:hover{background:var(--card-hover)}
+.ic::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+.ic.lv::before{background:var(--green)}
+.ic.sn::before{background:var(--gold)}
+.ictier{font-family:var(--serif);font-size:24px;color:var(--gold);margin-bottom:4px}
+.icname{font-family:var(--sans);font-size:12.5px;color:var(--text1);margin-bottom:6px}
+.icst{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:2px 8px;display:inline-block;border-radius:2px}
+.icst.live{color:var(--green);background:rgba(61,170,110,0.1);border:1px solid rgba(61,170,110,0.2)}
+.icst.soon{color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-mid)}
+.icst.planned{color:var(--text3);border:1px solid var(--border)}
+.qb-row{display:flex;gap:6px;flex-wrap:wrap}
+.qb{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:8px 14px;background:none;border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all 0.2s;border-radius:2px}
+.qb:hover{border-color:var(--gold);color:var(--gold)}
+/* PODCAST */
+#podcast{background:var(--bg2)}
+.pdbanner{background:var(--card-bg);border:1px solid var(--border);padding:32px;margin-bottom:20px;border-radius:2px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
+.pdtag{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.pdh{font-family:var(--serif);font-size:clamp(20px,3vw,30px);color:var(--text1);line-height:1.15;margin-bottom:10px}
+.pdp{font-size:13.5px;color:var(--text2);max-width:460px;line-height:1.72;margin-bottom:14px}
+.wlform{display:flex;gap:6px;max-width:380px;flex-wrap:wrap}
+.wlinp{flex:1;min-width:180px;padding:9px 12px;background:var(--bg2);border:1px solid var(--border2);color:var(--text1);font-family:var(--sans);font-size:13px;border-radius:2px;outline:none;transition:border-color 0.2s}
+.wlinp:focus{border-color:var(--gold)}
+.wlinp::placeholder{color:var(--text3)}
+.wlbtn{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 18px;background:var(--gold);color:#09090F;border:none;cursor:pointer;font-weight:700;border-radius:2px;transition:all 0.2s;white-space:nowrap}
+.wlbtn:hover{background:var(--gold-b)}
+.pdbadge{display:flex;flex-direction:column;align-items:center;justify-content:center;width:130px;height:130px;border:1px solid var(--border2);border-radius:2px;font-size:36px;color:var(--gold);background:var(--gold-dim);text-align:center;flex-shrink:0}
+.pdbadge span{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-top:4px}
+.epgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)}
+.ep{background:var(--card-bg);padding:20px;cursor:pointer;transition:background 0.2s}
+.ep:hover{background:var(--card-hover)}
+.epser{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.eptit{font-family:var(--serif);font-size:16px;color:var(--text1);margin-bottom:8px;line-height:1.3}
+.epx{font-size:12.5px;color:var(--text2);line-height:1.68;margin-bottom:8px}
+.eplbl{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.08em}
+/* FOOTER */
+footer{border-top:1px solid var(--border);max-width:1100px;margin:0 auto;padding:44px 32px 36px}
+.ftop{display:flex;justify-content:space-between;align-items:flex-start;gap:36px;margin-bottom:28px;flex-wrap:wrap}
+.fname{font-family:var(--serif);font-size:22px;color:var(--gold);margin-bottom:3px}
+.ftag{font-family:var(--serif);font-size:13px;color:var(--text2);font-style:italic;margin-bottom:16px}
+.fcon{display:flex;flex-direction:column;gap:6px}
+.fcon a{font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;transition:color 0.2s}
+.fcon a:hover{color:var(--gold)}
+.faaa{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);line-height:2}
+.fdis{border-top:1px solid var(--border);padding-top:24px}
+.fdislbl{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.fdistxt{font-size:11.5px;color:var(--text3);line-height:1.82;max-width:820px}
+.fcopy{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:18px;letter-spacing:0.1em}
+@media(max-width:900px){.play{grid-template-columns:1fr}}
+@media(max-width:768px){.pdbanner{grid-template-columns:1fr}.pdbadge{display:none}}
+@media(max-width:640px){.sec{padding:44px 16px}.si{padding:32px 16px}.hero-inner{padding:56px 20px}.btiers{grid-template-columns:1fr}.htab{font-size:8px;padding:5px 6px}.pw{grid-template-columns:36px 1fr;gap:10px}.pwrt{display:none}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav>
+  <div class="nav-logo">Mindlytics</div>
+  <div class="nav-links">
+    <a href="#search" class="nav-link">Search</a>
+    <a href="#pathway" class="nav-link">Pathway</a>
+    <a href="#ai" class="nav-link">AI</a>
+    <a href="#tools" class="nav-link">Tools</a>
+    <a href="#skills" class="nav-link">Skills</a>
+    <a href="#income" class="nav-link">Income</a>
+    <a href="#podcast" class="nav-link">Podcast</a>
+    <button id="themeBtn">Light</button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eye">Artigellence &middot; Augmentation &middot; Aggregator &middot; AAA</div>
+    <div class="hero-badge"><span class="bdot"></span>AI Growth Specialist &middot; v2 Live</div>
+    <h1 class="hero-h1">Your AI<br><em>Growth</em> Specialist</h1>
+    <div class="hero-sub">Mindlytics &middot; Intelligence for the Sovereign Creator</div>
+    <p class="hero-desc">Not a dashboard &mdash; a second brain. Search any podcast, find the exact moment. Get your personalised roadmap: week one to three years, tool by tool, dollar by dollar.</p>
+    <div class="hero-cta">
+      <a href="#search" class="btn-gold">Search Podcasts</a>
+      <a href="#pathway" class="btn-out">Build My Roadmap</a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-n">33</span><span class="stat-l">Curated Tools</span></div>
+      <div><span class="stat-n">22</span><span class="stat-l">Income Streams</span></div>
+      <div><span class="stat-n">12</span><span class="stat-l">Skill Pathways</span></div>
+      <div><span class="stat-n">6</span><span class="stat-l">Time Horizons</span></div>
+    </div>
+  </div>
+</section>
+
+<div id="search">
+  <div class="si">
+    <div class="sec-tag">The Wedge &middot; Beta</div>
+    <h2 class="sh">Search Every Podcast. Find Every Moment.</h2>
+    <p class="sp">Type any topic, skill, tool, or person. We surface the exact episode across YouTube, Spotify, and Apple Podcasts.</p>
+    <div class="sbox-w">
+      <input type="text" class="sbox" id="podSearch" placeholder="e.g. how to start freelancing with no experience">
+      <button class="sgo" id="searchBtn">Search</button>
+    </div>
+    <div class="ptags">
+      <span class="llbl">Sources:</span>
+      <button class="ptag on" id="pt-yt">YouTube</button>
+      <button class="ptag on" id="pt-sp">Spotify</button>
+      <button class="ptag on" id="pt-ap">Apple Podcasts</button>
+    </div>
+    <div class="lrow">
+      <span class="llbl">Language:</span>
+      <button class="lbtn on" id="ln-en">English</button>
+      <button class="lbtn" id="ln-hi">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</button>
+      <button class="lbtn" id="ln-es">Espa&#241;ol</button>
+      <button class="lbtn" id="ln-pt">Portugu&#234;s</button>
+      <button class="lbtn" id="ln-ar">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</button>
+    </div>
+    <p class="snote">Beta &middot; Expanding coverage continuously &middot; Click any result to listen</p>
+    <div class="sres" id="searchResults">
+      <div class="srh" id="srHeader"></div>
+      <div class="srgrid" id="srGrid"></div>
+    </div>
+  </div>
+</div>
+
+<section id="pathway" class="sec sec-border">
+  <div class="play">
+    <div>
+      <div class="sec-tag">Pathway Engine &middot; The Moat</div>
+      <h2 class="sec-h">What Can You Earn<br>in One Week?</h2>
+      <p class="sec-p">Tell us who you are. Get the exact roadmap from week one through year three. Every tool is real, every course is free, every income stream is verified.</p>
+      <div class="pmb"><span style="width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0;animation:blink 2s infinite;display:inline-block"></span>No equivalent product exists</div>
+      <div class="psteps">
+        <div class="pst"><span class="psn">01</span><div><div class="pstit">Tell us your profile</div><div class="pssub">Age, background, skills, languages, budget</div></div></div>
+        <div class="pst"><span class="psn">02</span><div><div class="pstit">Get your roadmap</div><div class="pssub">1 week to 1 month to 3 months to 1 year to 3 years</div></div></div>
+        <div class="pst"><span class="psn">03</span><div><div class="pstit">Tiered by your budget</div><div class="pssub">Free to $20 to $50 to $100+ recommendations</div></div></div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pctit">Build Your Roadmap</div>
+      <div class="pinps">
+        <div class="prow">
+          <input type="number" class="pinp" id="p_age" placeholder="Age" min="15" max="80">
+          <select class="psel" id="p_budget">
+            <option value="free">$0 - Free only</option>
+            <option value="20">Up to $20/month</option>
+            <option value="50">Up to $50/month</option>
+            <option value="100">$100+/month</option>
+          </select>
+        </div>
+        <input type="text" class="pinp" id="p_edu" placeholder="Education (e.g. Finance degree, self-taught)">
+        <input type="text" class="pinp" id="p_skills" placeholder="Key strengths (e.g. writing, debate, outdoor, travel)">
+        <input type="text" class="pinp" id="p_langs" placeholder="Languages (e.g. English, Hindi, French)">
+        <textarea class="ptarea" id="p_goals" placeholder="What do you want to achieve? (e.g. earn online from scratch, side income, digital nomad)"></textarea>
+        <div class="lrow">
+          <span class="llbl">Output in:</span>
+          <button class="lbtn on" id="rl-en">EN</button>
+          <button class="lbtn" id="rl-hi">HI</button>
+          <button class="lbtn" id="rl-es">ES</button>
+          <button class="lbtn" id="rl-pt">PT</button>
+          <button class="lbtn" id="rl-ar">AR</button>
+        </div>
+      </div>
+      <div class="fnote"><b>Free:</b> Week 1 + Month 1, $0-tier tools &nbsp;&middot;&nbsp; <b>$9.99/mo:</b> All 6 horizons x all 4 budget tiers</div>
+      <button class="gbtn" id="generateBtn">Generate My Roadmap &rarr;</button>
+    </div>
+  </div>
+  <div class="rgen" id="rgen"><div class="rspin"></div><div class="rgtxt" id="rgtxt">Analysing your profile...</div></div>
+  <div class="rwrap" id="rwrap">
+    <div class="rhdr">
+      <div class="rtit" id="rtit">Your Personalised Roadmap</div>
+      <div class="rstat"><span class="sdot"></span><span>Mindlytics Intelligence</span></div>
+    </div>
+    <div class="htabs">
+      <button class="htab on" id="ht-w1">Week 1</button>
+      <button class="htab" id="ht-m1">Month 1</button>
+      <button class="htab lk" id="ht-m3">3 Months</button>
+      <button class="htab lk" id="ht-m6">6 Months</button>
+      <button class="htab lk" id="ht-y1">Year 1</button>
+      <button class="htab lk" id="ht-y3">Year 3</button>
+    </div>
+    <div id="hcontent"></div>
+    <div class="upbanner">
+      <div class="uptxt">Unlock all 6 horizons + all 4 budget tiers. <b>$9.99/month.</b> Cancel anytime.</div>
+      <button class="upbtn" id="upgradeBtn">Unlock Full Roadmap</button>
+    </div>
+  </div>
+</section>
+
+<section id="ai" class="sec sec-border">
+  <div class="sec-tag">Intelligence Engine &middot; 5 Modes</div>
+  <h2 class="sec-h">Ask Mindlytics</h2>
+  <p class="sec-p">Five intelligence modes. Growth, Tools, Income, Mindset, Strategy. Powered by Claude.</p>
+  <div class="aic">
+    <div class="mtabs">
+      <button class="mtab on" data-mode="growth">Growth</button>
+      <button class="mtab" data-mode="tools">Tools</button>
+      <button class="mtab" data-mode="income">Income</button>
+      <button class="mtab" data-mode="mindset">Mindset</button>
+      <button class="mtab" data-mode="strategy">Strategy</button>
+    </div>
+    <textarea class="aiinp" id="aiInput" placeholder="Ask about income strategies, AI tools, content systems, mindset, automation, growth roadmaps..."></textarea>
+    <button class="aisub" id="aiSubmit">Activate Intelligence</button>
+  </div>
+  <div class="aires">
+    <div class="airesh"><span class="airest">Mindlytics Response</span><div class="aist" id="aiStatus"></div></div>
+    <div class="aiout" id="aiOut">Intelligence standing by. Select a mode and ask anything.</div>
+    <div class="aichips">
+      <button class="achip" id="chip-vault">+ Vault</button>
+      <button class="achip" id="chip-share">Share</button>
+      <button class="achip" id="chip-sum">Summarise</button>
+      <button class="achip" id="chip-deep">Deep Dive</button>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="sec sec-border">
+  <div class="sec-tag">Curated Arsenal &mdash; Verified May 2026</div>
+  <h2 class="sec-h">Tools That Move</h2>
+  <p class="sec-p">The exact stack that runs a lean creator empire. Every tool connects to an income stream. Click to open.</p>
+  <div class="tbar">
+    <input type="text" class="tsrch" id="toolSearch" placeholder="Search tools...">
+    <button class="tflt on" data-cat="all">All</button>
+    <button class="tflt" data-cat="ai">AI</button>
+    <button class="tflt" data-cat="video">Video</button>
+    <button class="tflt" data-cat="content">Content</button>
+    <button class="tflt" data-cat="income">Income</button>
+    <button class="tflt" data-cat="growth">Growth</button>
+  </div>
+  <div class="tgrid" id="toolsGrid"></div>
+</section>
+
+<section id="skills" class="sec sec-border">
+  <div class="sec-tag">Growth Architecture</div>
+  <h2 class="sec-h">12 Skill Pathways</h2>
+  <p class="sec-p">12 structured sequences. Click any pathway to expand it and launch into the AI engine.</p>
+  <div class="pwlist" id="pwList"></div>
+</section>
+
+<section id="income" class="sec sec-border">
+  <div class="sec-tag">Monetisation Matrix</div>
+  <h2 class="sec-h">22 Income Streams</h2>
+  <p class="sec-p">$1 to $22 &mdash; from passive podcast revenue to high-ticket consulting. Click any stream for the AI blueprint.</p>
+  <div class="igrid" id="incomeGrid"></div>
+  <div class="sec-tag" style="margin-bottom:10px">Quick Blueprints</div>
+  <div class="qb-row">
+    <button class="qb" id="qb1">Digital Products Blueprint</button>
+    <button class="qb" id="qb2">Compound Income Stack</button>
+    <button class="qb" id="qb3">90-Day to $3K</button>
+    <button class="qb" id="qb4">Highest Leverage Streams</button>
+  </div>
+</section>
+
+<section id="podcast" class="sec sec-border">
+  <div class="sec-tag">The Series &middot; Launching Soon</div>
+  <h2 class="sec-h">Podcast Launching Soon</h2>
+  <p class="sec-p">48 episodes. 12 series. One system. Join the waitlist below.</p>
+  <div class="pdbanner">
+    <div>
+      <div class="pdtag">Mindlytics Podcast</div>
+      <h3 class="pdh">48 Episodes.<br>12 Series. One System.</h3>
+      <p class="pdp">Growth, mindset, income, and AI in one deliberate series. Every episode ends with one action you can take today.</p>
+      <div class="wlform">
+        <input type="email" class="wlinp" id="wlEmail" placeholder="your@email.com">
+        <button class="wlbtn" id="wlBtn">Join Waitlist</button>
+      </div>
+      <div id="wlMsg" style="font-family:var(--mono);font-size:10px;color:var(--green);margin-top:8px;display:none">You are on the list. We will reach out.</div>
+    </div>
+    <div class="pdbadge">&#127897;<span>Launching<br>Soon</span></div>
+  </div>
+  <div class="epgrid" id="epGrid"></div>
+</section>
+
+<footer>
+  <div class="ftop">
+    <div>
+      <div class="fname">Raj Singh</div>
+      <div class="ftag">Let's realign &mdash; and rise together</div>
+      <div class="fcon">
+        <a href="mailto:raj@artigellence.com">&#9993; raj@artigellence.com</a>
+        <a href="https://wa.me/61469313323" target="_blank">&#9742; +61-469-313-323 (WhatsApp)</a>
+        <a href="https://www.rajsingh.online" target="_blank">&#8853; www.rajsingh.online</a>
+      </div>
+    </div>
+    <div>
+      <div class="faaa">Augmentation &middot; Aggregator &middot; AAA</div>
+      <div class="faaa">Mindlytics &middot; mindlytics.xyz</div>
+      <div class="faaa">Sydney &middot; Australia &middot; 2026</div>
+    </div>
+  </div>
+  <div class="fdis">
+    <div class="fdislbl">Disclaimer &amp; Disclosures</div>
+    <p class="fdistxt">Mindlytics is an independent intelligence and curation platform. Content is for educational and informational purposes only. AI-generated responses may contain errors &mdash; verify independently before acting. Some tool links are affiliate links; commission earned at no additional cost to you. Affiliate relationships do not influence recommendations. Results vary. Not financial, legal, or investment advice.</p>
+    <div class="fcopy">&copy; 2026 Raj Singh &middot; Artigellence &middot; All rights reserved &middot; Mindlytics v2.0</div>
+  </div>
+</footer>
+
+<script>
+(function() {
+"use strict";
+
+/* ---- SCROLL + NAV ---- */
+window.addEventListener("scroll", function() {
+  var s = document.documentElement;
+  var pct = (s.scrollTop || document.body.scrollTop) / (s.scrollHeight - s.clientHeight) * 100;
+  document.getElementById("progress").style.width = pct + "%";
+  document.querySelectorAll(".nav-link").forEach(function(l) {
+    var h = l.getAttribute("href");
+    if (!h || h[0] !== "#") return;
+    var sec = document.querySelector(h);
+    if (!sec) return;
+    var r = sec.getBoundingClientRect();
+    l.classList.toggle("active", r.top <= 70 && r.bottom > 70);
+  });
+});
+
+/* ---- THEME ---- */
+document.getElementById("themeBtn").addEventListener("click", function() {
+  var h = document.documentElement;
+  var dark = h.getAttribute("data-theme") === "dark";
+  h.setAttribute("data-theme", dark ? "light" : "dark");
+  this.textContent = dark ? "Dark" : "Light";
+  localStorage.setItem("ml_theme", dark ? "light" : "dark");
+});
+(function() {
+  var t = localStorage.getItem("ml_theme");
+  if (t) {
+    document.documentElement.setAttribute("data-theme", t);
+    document.getElementById("themeBtn").textContent = t === "dark" ? "Light" : "Dark";
+  }
+})();
+
+/* ---- LANGUAGE BUTTONS ---- */
+function setupLangGroup(prefix, ids, callback) {
+  ids.forEach(function(id) {
+    var el = document.getElementById(prefix + id);
+    if (!el) return;
+    el.addEventListener("click", function() {
+      ids.forEach(function(i2) {
+        var b = document.getElementById(prefix + i2);
+        if (b) b.classList.remove("on");
+      });
+      el.classList.add("on");
+      if (callback) callback(id);
+    });
+  });
+}
+setupLangGroup("ln-", ["en","hi","es","pt","ar"], null);
+setupLangGroup("rl-", ["en","hi","es","pt","ar"], null);
+
+/* ---- PODCAST SEARCH ---- */
+var activePlatforms = { yt: true, sp: true, ap: true };
+document.getElementById("pt-yt").addEventListener("click", function() { activePlatforms.yt = !activePlatforms.yt; this.classList.toggle("on"); });
+document.getElementById("pt-sp").addEventListener("click", function() { activePlatforms.sp = !activePlatforms.sp; this.classList.toggle("on"); });
+document.getElementById("pt-ap").addEventListener("click", function() { activePlatforms.ap = !activePlatforms.ap; this.classList.toggle("on"); });
+
+var DEMOS = [
+  { p: "yt", title: "How I Made $3,000 in My First Month Freelancing", show: "My First Million", meta: "Episode 312 - 1:04:22 jump to moment", link: "https://youtube.com" },
+  { p: "sp", title: "Starting From Zero: No Experience, Real Income", show: "The Side Hustle Show", meta: "Episode 589 - Spotify - 44 min", link: "https://open.spotify.com" },
+  { p: "ap", title: "Debate Skills That Pay - Persuasion as a Career Superpower", show: "The Tim Ferriss Show", meta: "Episode 501 - Apple Podcasts", link: "https://podcasts.apple.com" },
+  { p: "yt", title: "Finance Degree to Digital Nomad - The Exact Transition Plan", show: "Starter Story", meta: "Episode 88 - 58:17 jump to moment", link: "https://youtube.com" },
+  { p: "sp", title: "Multilingual Creator Advantage: 3 Languages Tripled My Reach", show: "The Creator Economy", meta: "Episode 44 - Spotify", link: "https://open.spotify.com" }
+];
+
+function runSearch() {
+  var q = document.getElementById("podSearch").value.trim();
+  if (!q) return;
+  var demos = DEMOS.filter(function(d) { return activePlatforms[d.p]; });
+  var header = document.getElementById("srHeader");
+  var grid = document.getElementById("srGrid");
+  var res = document.getElementById("searchResults");
+  header.textContent = "Found " + demos.length + " results for: " + q + "  (Beta - click to listen)";
+  grid.innerHTML = "";
+  demos.forEach(function(d) {
+    var pl = d.p === "yt" ? "YouTube" : d.p === "sp" ? "Spotify" : "Apple";
+    var el = document.createElement("div");
+    el.className = "sri";
+    el.innerHTML = "<span class='spl " + d.p + "'>" + pl + "</span><div><div class='sti'>" + d.title + "</div><div class='sme'>" + d.show + " - " + d.meta + "</div></div><span class='sac'>Listen &rarr;</span>";
+    el.addEventListener("click", function() { window.open(d.link, "_blank"); });
+    grid.appendChild(el);
+  });
+  res.classList.add("show");
+  setTimeout(function() { res.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 80);
+}
+document.getElementById("searchBtn").addEventListener("click", runSearch);
+document.getElementById("podSearch").addEventListener("keydown", function(e) { if (e.key === "Enter") runSearch(); });
+
+/* ---- PATHWAY ENGINE ---- */
+var roadmapData = null;
+document.getElementById("generateBtn").addEventListener("click", function() {
+  var age = document.getElementById("p_age").value;
+  var budget = document.getElementById("p_budget").value;
+  var edu = document.getElementById("p_edu").value;
+  var skills = document.getElementById("p_skills").value;
+  var goals = document.getElementById("p_goals").value;
+  if (!age || !edu || !skills || !goals) { alert("Please fill in age, education, strengths, and goals."); return; }
+  var btn = this;
+  btn.disabled = true;
+  document.getElementById("rgen").classList.add("show");
+  document.getElementById("rwrap").classList.remove("show");
+  var msgs = ["Analysing your profile...", "Mapping to income streams...", "Selecting tools for your budget...", "Building your week-one plan...", "Finalising your roadmap..."];
+  var gi = 0;
+  var iv = setInterval(function() { gi = (gi+1) % msgs.length; document.getElementById("rgtxt").textContent = msgs[gi]; }, 800);
+  setTimeout(function() {
+    clearInterval(iv);
+    document.getElementById("rgen").classList.remove("show");
+    btn.disabled = false;
+    var sk = skills.toLowerCase();
+    var ed = edu.toLowerCase();
+    var stream = sk.indexOf("debat") >= 0 ? "Consulting / Speaking ($20 stream)" :
+      sk.indexOf("writ") >= 0 ? "Blog / Substack ($3 stream)" :
+      ed.indexOf("financ") >= 0 ? "Digital Products + Consulting ($5 + $20 stream)" :
+      sk.indexOf("travel") >= 0 ? "Blog / YouTube Travel ($2 + $3 stream)" :
+      "Digital Products ($5 stream)";
+    var bLabel = { "free":"$0 Free", "20":"Up to $20/mo", "50":"Up to $50/mo", "100":"$100+/mo" }[budget];
+    document.getElementById("rtit").textContent = "Roadmap - Age " + age + " - " + bLabel;
+    roadmapData = {
+      w1: { label:"Week 1", actions:["Pick ONE income stream from the 22. Lowest barrier: Digital Products or Clips + Shorts.","Create your free Claude account at claude.ai and run 10 prompts on your chosen stream.","Start Google Digital Garage free certification - complete 2 modules this week."], stream:stream, earning:"$0-50 (setup phase)", budget:budget },
+      m1: { label:"Month 1", actions:["Publish your first piece of content: YouTube short, blog post, or a digital product draft.","Set up a free Gumroad account and list your first product (template, guide, checklist).","Build your email waitlist using Kit free tier - target 50 subscribers this month."], stream:stream, earning:"$50-300 (first sales)", budget:budget }
+    };
+    showHorizon("w1");
+    document.getElementById("rwrap").classList.add("show");
+    setTimeout(function() { document.getElementById("rwrap").scrollIntoView({ behavior:"smooth", block:"start" }); }, 100);
+  }, 3000);
+});
+
+function buildTierHTML(d) {
+  var html = "<div class='btiers'>";
+  html += "<div class='btier'><div class='tierlbl'>Actions - " + d.label + "</div><div class='tierp'>Do This</div><ul class='tierli'>";
+  d.actions.forEach(function(a) { html += "<li>" + a + "</li>"; });
+  html += "</ul></div>";
+  html += "<div class='btier'><div class='tierlbl'>Free Tools ($0)</div><div class='tierp'>$0</div><ul class='tierli'>";
+  html += "<li>Claude (claude.ai) - AI co-founder. Free tier is genuinely powerful.</li>";
+  html += "<li>Canva (canva.com) - Professional graphics. Free forever tier.</li>";
+  html += "<li>Google Digital Garage - Free certified digital marketing course.</li>";
+  html += "</ul></div>";
+  if (d.budget !== "free") {
+    html += "<div class='btier'><div class='tierlbl'>Upgrade Tools</div><div class='tierp'>$9-20/mo</div><ul class='tierli'>";
+    html += "<li>Notion AI ($10/mo) - Second brain + AI built in.</li>";
+    html += "<li>Kit (ConvertKit) ($9/mo) - Email list from day one.</li>";
+    html += "</ul></div>";
+  } else {
+    html += "<div class='btier lkt'><div class='tierlbl'>$20 / $50 / $100+</div><div class='tierp'>Locked</div><ul class='tierli'><li>Upgrade to unlock paid-tier stack</li></ul></div>";
+  }
+  html += "<div class='btier'><div class='tierlbl'>Best Income Stream</div><div class='tierp'>For You</div><ul class='tierli'><li>" + d.stream + "</li><li>Earnings " + d.label + ": " + d.earning + "</li></ul></div>";
+  html += "</div>";
+  return html;
+}
+
+function showHorizon(key) {
+  if (!roadmapData) return;
+  document.getElementById("hcontent").innerHTML = buildTierHTML(roadmapData[key]);
+}
+
+document.getElementById("ht-w1").addEventListener("click", function() {
+  setActiveTab(this); showHorizon("w1");
+});
+document.getElementById("ht-m1").addEventListener("click", function() {
+  setActiveTab(this); showHorizon("m1");
+});
+document.getElementById("ht-m3").addEventListener("click", function() { upgradePrompt(); });
+document.getElementById("ht-m6").addEventListener("click", function() { upgradePrompt(); });
+document.getElementById("ht-y1").addEventListener("click", function() { upgradePrompt(); });
+document.getElementById("ht-y3").addEventListener("click", function() { upgradePrompt(); });
+document.getElementById("upgradeBtn").addEventListener("click", function() { upgradePrompt(); });
+
+function setActiveTab(btn) {
+  document.querySelectorAll(".htab:not(.lk)").forEach(function(t) { t.classList.remove("on"); });
+  btn.classList.add("on");
+}
+function upgradePrompt() {
+  alert("Full Roadmap - $9.99/month
+
+Unlocks:
+- All 6 horizons (Week 1 to Year 3)
+- All 4 budget tiers
+- Full curated tool stack
+- Multilingual output
+
+Payment integration coming soon.");
+}
+
+/* ---- AI MODES ---- */
+var activeMode = "growth";
+var MODES = {
+  growth: "You are the Mindlytics Growth Intelligence. Sharp, specific, actionable growth strategy for sovereign creators. Every answer includes one concrete action to take today. No fluff.",
+  tools: "You are the Mindlytics Tools Intelligence. Recommend AI tools for creators. Know exact free tiers, real costs, honest limitations. Verified tools only, no hallucinations.",
+  income: "You are the Mindlytics Income Intelligence. Precise income strategy for solo creators. Reference 22 streams: Podcast, YouTube+Pinterest, Blog, Clips+Shorts, Digital Products, Print on Demand, Newsletter, Shopify, WooCommerce, Quora+Reddit, Community, WhatsApp+LinkedIn, Telegram+Discord, Bots+Agents, Promotions, Ebooks+Courses, Nature Sounds, Widgets, White Label, Consulting, Book, Life Coach. Be realistic about timelines.",
+  mindset: "You are the Mindlytics Mindset Intelligence. Evidence-based, practical mindset coaching for sovereign creators. No toxic positivity. Real frameworks, real tactics.",
+  strategy: "You are the Mindlytics Strategy Intelligence. High-level strategy for a long-term digital empire. Think 1-year, 3-year, 10-year arcs. Reference the AAA pattern."
+};
+var DEMO_REPLIES = {
+  growth: "Growth strategy:\n\n1. BUILD your email list first - the only platform you own. Target 1,000 subscribers before monetising.\n\n2. COMPOUND by publishing once and repurposing across 3+ platforms. One idea = 4x reach at 1x effort.\n\n3. AUTOMATE repetitive tasks with Claude + Zapier.\n\nImmediate action: Define your one distribution channel and commit for 90 days.",
+  tools: "Verified tool stack:\n\nClaude (claude.ai) - best AI, free tier powerful\nCanva - professional design at $0\nNotion - second brain, free for personal use\nKit (ConvertKit) - email, free to 10,000 subscribers\nGumroad - sell digital products, zero upfront cost\n\nAll verified May 2026.",
+  income: "Income strategy from the 22 streams:\n\n$5 Digital Products - fastest path to first dollar. One $7 template this week.\n$3 Blog/Substack - compound content earning while you sleep.\n$1 Podcast - slower start, highest trust and loyalty.\n\nRealistic: $0-200 Month 1, $500-2000 Month 6, $3000+ Month 12 with consistency.",
+  mindset: "Three mindset systems:\n\n1. Identity before action. Decide you are a creator before you feel like one.\n\n2. Constraint as accelerant. Fewer options means faster decisions and more execution.\n\n3. Weekly feedback loops. Review metrics to hear what the market is telling you.\n\nImmediate: Write one sentence describing who you are becoming.",
+  strategy: "AAA Pattern applied:\n\nAugmentation: Use AI to produce at 10x your natural rate.\nAggregation: Curate the best information in your niche.\nPresentation: Package it better than anyone else.\n\n3-year arc: Year 1 = audience. Year 2 = product. Year 3 = system."
+};
+
+document.querySelectorAll(".mtab").forEach(function(t) {
+  t.addEventListener("click", function() {
+    document.querySelectorAll(".mtab").forEach(function(b) { b.classList.remove("on"); });
+    t.classList.add("on");
+    activeMode = t.getAttribute("data-mode");
+  });
+});
+
+function askMindlytics() {
+  var q = document.getElementById("aiInput").value.trim();
+  if (!q) return;
+  var btn = document.getElementById("aiSubmit");
+  var out = document.getElementById("aiOut");
+  var status = document.getElementById("aiStatus");
+  btn.disabled = true;
+  status.classList.add("active");
+  out.textContent = "Thinking...";
+  setTimeout(function() {
+    out.textContent = (DEMO_REPLIES[activeMode] || DEMO_REPLIES.growth) + "\n\n[Add your API key to activate live Claude intelligence]";
+    btn.disabled = false;
+    status.classList.remove("active");
+  }, 1200);
+}
+
+function analyseIncome(prompt) {
+  document.getElementById("aiInput").value = prompt;
+  document.querySelectorAll(".mtab").forEach(function(b) { b.classList.remove("on"); });
+  document.querySelector("[data-mode='income']").classList.add("on");
+  activeMode = "income";
+  document.getElementById("ai").scrollIntoView({ behavior: "smooth" });
+  setTimeout(askMindlytics, 350);
+}
+
+document.getElementById("aiSubmit").addEventListener("click", askMindlytics);
+document.getElementById("chip-vault").addEventListener("click", function() { alert("Vault - save this response. Coming soon."); });
+document.getElementById("chip-share").addEventListener("click", function() {
+  if (navigator.clipboard) navigator.clipboard.writeText(document.getElementById("aiOut").textContent).then(function() { alert("Copied."); });
+});
+document.getElementById("chip-sum").addEventListener("click", function() {
+  var t = document.getElementById("aiOut").textContent;
+  document.getElementById("aiOut").textContent = "Summary: " + t.substring(0, 280) + "...";
+});
+document.getElementById("chip-deep").addEventListener("click", function() {
+  document.getElementById("aiInput").value = "Go deeper: " + document.getElementById("aiInput").value + ". Advanced tactics, edge cases, what most people miss.";
+  askMindlytics();
+});
+
+/* ---- QUICK BLUEPRINTS ---- */
+document.getElementById("qb1").addEventListener("click", function() { analyseIncome("Fastest path to $1000 per month from digital products. Give me the exact 30-day blueprint with daily actions."); });
+document.getElementById("qb2").addEventListener("click", function() { analyseIncome("How do I combine podcast and affiliate and newsletter for compound income? Give me the full layered system."); });
+document.getElementById("qb3").addEventListener("click", function() { analyseIncome("Precise 90-day roadmap to hit $3000 per month revenue from scratch starting today. Be specific."); });
+document.getElementById("qb4").addEventListener("click", function() { analyseIncome("Top 3 highest-leverage income streams for a solo creator with zero audience right now."); });
+
+/* ---- TOOLS ---- */
+var tools = [
+  { n:"Claude", c:"ai", d:"Anthropic flagship. Best at reasoning, long-context analysis, honest answers. The intelligence layer behind Mindlytics itself. Start here for content, strategy, research, and code.", s:5, l:"https://claude.ai" },
+  { n:"ChatGPT", c:"ai", d:"OpenAI conversational AI. Most widely recognised LLM. Strong for quick creative tasks, code generation, broad knowledge retrieval.", s:5, l:"https://chatgpt.com" },
+  { n:"Gemini", c:"ai", d:"Google multimodal model. Native Google Workspace integration. Strong on real-time search and document analysis.", s:4, l:"https://gemini.google.com" },
+  { n:"Perplexity", c:"ai", d:"AI search with citations. Use before Claude for fact-gathering. Free tier is excellent. Eliminates hallucination risk by sourcing every claim.", s:5, l:"https://perplexity.ai" },
+  { n:"Grok", c:"ai", d:"xAI model with real-time X/Twitter access. Use for trend intelligence and social listening.", s:4, l:"https://grok.x.ai" },
+  { n:"Mistral", c:"ai", d:"European open-source LLM. Privacy-first, deployable locally. Right choice when data sovereignty matters.", s:4, l:"https://mistral.ai" },
+  { n:"ElevenLabs", c:"ai", d:"Gold standard for AI voice. Clone your voice or generate audio in 30+ languages. Turn blog posts into podcasts in minutes.", s:5, l:"https://elevenlabs.io" },
+  { n:"Midjourney", c:"ai", d:"Professional AI image model. Photorealistic and artistic images for thumbnails, product mockups, brand assets. Requires Discord.", s:5, l:"https://midjourney.com" },
+  { n:"Runway", c:"video", d:"Professional AI video generation and editing. Gen-3 produces cinematic output. The gap between amateur and professional video collapsed.", s:5, l:"https://runwayml.com" },
+  { n:"CapCut", c:"video", d:"Free video editor for creators. Auto-captions, beat sync, AI effects, trending templates. From raw footage to polished short in under 10 minutes.", s:5, l:"https://capcut.com" },
+  { n:"Descript", c:"video", d:"Edit video by editing the transcript. Remove filler words, overdub your voice, produce studio-quality audio/video.", s:4, l:"https://descript.com" },
+  { n:"Canva", c:"content", d:"The visual layer of every creator stack. Templates for everything. Social posts, presentations, PDFs. Free tier is genuinely powerful.", s:5, l:"https://canva.com" },
+  { n:"Notion", c:"content", d:"Your second brain. Notes, databases, project management, wikis, and AI built in. Free forever for personal use.", s:5, l:"https://notion.so" },
+  { n:"Epidemic Sound", c:"content", d:"Royalty-free music and SFX. One subscription, zero copyright claims. Non-negotiable for YouTube monetisation compliance.", s:4, l:"https://epidemicsound.com" },
+  { n:"Creative Fabrica", c:"content", d:"Commercial-license asset library. Buy once, sell unlimited. Fonts, graphics, SVG files, templates.", s:4, l:"https://creativefabrica.com" },
+  { n:"Kit (ConvertKit)", c:"growth", d:"Email is the only platform you actually own. Sequences, lead magnets, automations, newsletters. Build it from day one.", s:5, l:"https://kit.com" },
+  { n:"Beehiiv", c:"growth", d:"Newsletter platform with built-in referral programme and ad network. Best for creators who want monetisation baked in from launch.", s:4, l:"https://beehiiv.com" },
+  { n:"Skool", c:"growth", d:"Community + courses on one platform. Gamification drives engagement. Start free, monetise at 50+ members.", s:4, l:"https://skool.com" },
+  { n:"Nas.io", c:"growth", d:"Skool alternative with integrated payments and cleaner mobile experience.", s:4, l:"https://nas.io" },
+  { n:"Whop", c:"growth", d:"Sell access to communities, courses, software, and digital products. Storefront + community in one.", s:4, l:"https://whop.com" },
+  { n:"Hostinger", c:"growth", d:"Own your digital HQ. WordPress + Elementor - blog, store, lead capture, affiliate pages.", s:4, l:"https://hostinger.com" },
+  { n:"TubeMagic", c:"growth", d:"YouTube SEO from real data. Optimised titles, descriptions, tags, thumbnail concepts.", s:4, l:"https://tubemagic.com" },
+  { n:"NordVPN", c:"growth", d:"Non-negotiable for digital operators. Secure connections, access geo-restricted tools, protect business data.", s:4, l:"https://nordvpn.com" },
+  { n:"Gumroad", c:"income", d:"Fastest path from creation to cash. Sell PDFs, templates, mini-courses. Zero upfront cost, 10% fee only on sales.", s:4, l:"https://gumroad.com" },
+  { n:"Lemon Squeezy", c:"income", d:"Merchant of Record - handles global VAT automatically. Clean checkout, subscriptions, license key delivery.", s:4, l:"https://lemonsqueezy.com" },
+  { n:"Payhip", c:"income", d:"Gumroad alternative with better EU VAT handling. Supports digital downloads, courses, memberships, coaching bundles.", s:4, l:"https://payhip.com" },
+  { n:"Printify", c:"income", d:"Zero-inventory print-on-demand. Upload design, connect to Etsy or Shopify, collect margin. No stock, no fulfilment.", s:4, l:"https://printify.com" }
+];
+var activeCat = "all";
+function renderTools(list) {
+  var grid = document.getElementById("toolsGrid");
+  grid.innerHTML = "";
+  list.forEach(function(t) {
+    var stars = "";
+    for (var i = 0; i < 5; i++) stars += i < t.s ? "&#9733;" : "&#9734;";
+    var el = document.createElement("div");
+    el.className = "tc";
+    el.innerHTML = "<div class='tcat " + t.c + "'>" + t.c + "</div><div class='tname'>" + t.n + "</div><div class='tdesc'>" + t.d + "</div><div class='tfoot'><span class='tstars'>" + stars + "</span><span class='tlink'>Open &rarr;</span></div>";
+    el.addEventListener("click", function() { window.open(t.l, "_blank"); });
+    grid.appendChild(el);
+  });
+}
+function filterTools() {
+  var q = document.getElementById("toolSearch").value.toLowerCase();
+  renderTools(tools.filter(function(t) {
+    return (activeCat === "all" || t.c === activeCat) &&
+      (t.n.toLowerCase().indexOf(q) >= 0 || t.d.toLowerCase().indexOf(q) >= 0);
+  }));
+}
+document.getElementById("toolSearch").addEventListener("input", filterTools);
+document.querySelectorAll(".tflt").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    activeCat = btn.getAttribute("data-cat");
+    document.querySelectorAll(".tflt").forEach(function(b) { b.classList.remove("on"); });
+    btn.classList.add("on");
+    filterTools();
+  });
+});
+renderTools(tools);
+
+/* ---- PATHWAYS ---- */
+var PW_DETAILS = [
+  "Map your mental terrain first. Before strategy, before tools - you need a clear signal. This pathway walks you through a structured reset: what is draining you, what is driving you, and the next right move. Four episodes, one week, total clarity.",
+  "22 income streams decoded into a sequenced system. Not theory - the exact order to build streams, which ones compound, and which to ignore until Month 6. By Episode 4 you have your first monetisation architecture on paper.",
+  "The neuroscience of written goals: why handwriting activates the reticular activating system, the daily journaling practice that feeds strategy, and the exact 3-prompt morning sequence used by sovereign creators.",
+  "AI tools demystified for the non-technical creator. Claude, Canva, Perplexity, Notion AI - as leverage, not features. By Episode 4 you will have a personal AI stack configured and running.",
+  "Manifestation is pattern recognition dressed in language. This pathway separates the science from the noise: visualisation, priming, and the identity-first framework that makes habits stick.",
+  "What to automate, what to keep human, in what order. Email sequences, content repurposing, social scheduling, client onboarding - the exact automation map for a one-person business.",
+  "Sound, breath, and frequency as productivity infrastructure. Not wellness content - this is performance science for creators who work long and deep.",
+  "Affiliate marketing without the grift. How to choose programmes honestly, disclose properly, and build an affiliate income layer that compounds.",
+  "The mind-body connection as leverage. Movement, nutrition timing, and breath protocols that directly affect cognitive output for creators who work with their minds.",
+  "From idea to listed product in four episodes. Validation, pricing, positioning, fulfilment, and the launch sequence for a digital product that sells while you sleep.",
+  "Abundance mindset is not positive thinking - it is a cognitive architecture. Scarcity triggers, reframing techniques, and daily practices that shift your operating system.",
+  "Vision without architecture is fantasy. Annual review, 3-year vision document, and a quarterly execution system. Your future becomes a project, not a hope."
+];
+var pathways = [
+  { n:"01", t:"Reboot and Realign", m:["Inner Work","4 Episodes"], p:100 },
+  { n:"02", t:"Digital Income Pathways", m:["Business","4 Episodes"], p:85 },
+  { n:"03", t:"Journaling for Growth", m:["Mindset","4 Episodes"], p:70 },
+  { n:"04", t:"AI Tools for Beginners", m:["Technology","4 Episodes"], p:55 },
+  { n:"05", t:"Manifestation Habits", m:["Inner Work","4 Episodes"], p:40 },
+  { n:"06", t:"Scaling with Automation", m:["Systems","4 Episodes"], p:28 },
+  { n:"07", t:"Healing Frequencies", m:["Wellness","4 Episodes"], p:15 },
+  { n:"08", t:"Affiliate Marketing Deep Dive", m:["Income","4 Episodes"], p:8 },
+  { n:"09", t:"Mind-Body Balance", m:["Wellness","4 Episodes"], p:5 },
+  { n:"10", t:"Digital Product Empire", m:["Business","4 Episodes"], p:3 },
+  { n:"11", t:"Abundance Mindset", m:["Mindset","4 Episodes"], p:2 },
+  { n:"12", t:"Year Vision and Future Planning", m:["Strategy","4 Episodes"], p:1 }
+];
+(function() {
+  var list = document.getElementById("pwList");
+  pathways.forEach(function(p, i) {
+    var row = document.createElement("div");
+    row.className = "pw";
+    row.innerHTML = "<div class='pwn'>" + p.n + "</div><div class='pwcont'><div class='pwt'>" + p.t + "</div><div class='pwm'><span>" + p.m[0] + "</span><span>" + p.m[1] + "</span></div></div><div class='pwrt'><div class='pbar'><div class='pfill' style='width:" + p.p + "%'></div></div><div class='pplbl'>" + p.p + "%</div><div class='pwarr' id='pwa" + i + "'>+ Expand</div></div>";
+    var det = document.createElement("div");
+    det.className = "pwdet";
+    det.id = "pwd" + i;
+    det.innerHTML = "<div class='pwdtxt'>" + PW_DETAILS[i] + "</div><div class='pwdact'><button class='pwabtn' id='pwai" + i + "'>Ask AI About This &rarr;</button><button class='pwabtn' id='pwrm" + i + "'>Build Roadmap &rarr;</button></div>";
+    list.appendChild(row);
+    list.appendChild(det);
+    row.addEventListener("click", function() {
+      var open = det.classList.contains("show");
+      det.classList.toggle("show");
+      document.getElementById("pwa" + i).textContent = open ? "+ Expand" : "- Close";
+    });
+    document.getElementById("pwai" + i).addEventListener("click", function(e) {
+      e.stopPropagation();
+      document.getElementById("aiInput").value = "Give me the complete system for the " + p.t + " pathway: key principles, weekly action plan, and how it connects to income generation.";
+      document.querySelectorAll(".mtab").forEach(function(b) { b.classList.remove("on"); });
+      document.querySelector("[data-mode='growth']").classList.add("on");
+      activeMode = "growth";
+      document.getElementById("ai").scrollIntoView({ behavior: "smooth" });
+      setTimeout(askMindlytics, 350);
+    });
+    document.getElementById("pwrm" + i).addEventListener("click", function(e) {
+      e.stopPropagation();
+      document.getElementById("p_goals").value = "I want to complete the " + p.t + " pathway and connect it to income generation.";
+      document.getElementById("pathway").scrollIntoView({ behavior: "smooth" });
+    });
+  });
+})();
+
+/* ---- INCOME STREAMS ---- */
+var streams = [
+  { t:"$1", n:"Podcast", s:"live" }, { t:"$2", n:"YouTube + Pinterest", s:"live" },
+  { t:"$3", n:"Blog / Medium / Substack", s:"live" }, { t:"$4", n:"Clips + Shorts + Reels", s:"live" },
+  { t:"$5", n:"Digital Products", s:"live" }, { t:"$6", n:"Print on Demand", s:"live" },
+  { t:"$7", n:"Newsletter + Playlist", s:"live" }, { t:"$8", n:"Shopify Store", s:"soon" },
+  { t:"$9", n:"WooCommerce Store", s:"soon" }, { t:"$10", n:"Quora + Reddit", s:"soon" },
+  { t:"$11", n:"Nas.io + Skool + Whop", s:"planned" }, { t:"$12", n:"WhatsApp + LinkedIn", s:"planned" },
+  { t:"$13", n:"Telegram + Discord", s:"planned" }, { t:"$14", n:"Bots + Agents + GPT", s:"planned" },
+  { t:"$15", n:"Promotions + Influence", s:"planned" }, { t:"$16", n:"Ebooks + Courses", s:"planned" },
+  { t:"$17", n:"Nature Sounds Channel", s:"planned" }, { t:"$18", n:"Widgets + Extensions", s:"planned" },
+  { t:"$19", n:"White Label Products", s:"planned" }, { t:"$20", n:"Consulting", s:"planned" },
+  { t:"$21", n:"Book", s:"planned" }, { t:"$22", n:"Life Coach", s:"planned" }
+];
+(function() {
+  var grid = document.getElementById("incomeGrid");
+  streams.forEach(function(s) {
+    var el = document.createElement("div");
+    el.className = "ic" + (s.s === "live" ? " lv" : s.s === "soon" ? " sn" : "");
+    el.innerHTML = "<div class='ictier'>" + s.t + "</div><div class='icname'>" + s.n + "</div><div class='icst " + s.s + "'>" + s.s + "</div>";
+    el.addEventListener("click", function() {
+      analyseIncome("Complete income strategy, monetisation timeline, and first 3 actionable steps for: " + s.n + " income stream, solo creator starting from scratch.");
+    });
+    grid.appendChild(el);
+  });
+})();
+
+/* ---- EPISODES ---- */
+var episodes = [
+  { ser:"Series 01 - Growth", t:"Confused and Overwhelmed? Here is Your Reset Button", x:"When the noise gets too loud, only one thing works. Not a productivity hack - a fundamental rewiring of how you begin.", ep:"Episode 01 - Launching Soon" },
+  { ser:"Series 02 - Income", t:"What Are Digital Income Streams and Why You Need Them Now", x:"You are already creating value. The question is whether you have built the infrastructure to capture it.", ep:"Episode 05 - Launching Soon" },
+  { ser:"Series 03 - Mindset", t:"The Science of Writing Down Your Goals", x:"Your brain on paper is 42% more likely to execute. Not motivation - neuroscience. The journal is not a diary.", ep:"Episode 09 - Launching Soon" },
+  { ser:"Series 04 - AI", t:"How AI is Changing the Game for Solopreneurs in 2026", x:"One person with the right AI stack can now out-execute a 10-person team from 2019. The leverage is extraordinary.", ep:"Episode 13 - Launching Soon" },
+  { ser:"Series 06 - Systems", t:"What Can and Should You Automate?", x:"Not everything should be automated. Knowing what to systemise versus what to keep human - that is the strategic layer.", ep:"Episode 21 - Launching Soon" },
+  { ser:"Series 10 - Products", t:"What Makes a Digital Product Actually Sell", x:"It is not the product. It is the clarity of the problem it solves. One sentence that describes the pain.", ep:"Episode 37 - Launching Soon" }
+];
+(function() {
+  var grid = document.getElementById("epGrid");
+  episodes.forEach(function(e) {
+    var el = document.createElement("div");
+    el.className = "ep";
+    el.innerHTML = "<div class='epser'>" + e.ser + "</div><div class='eptit'>" + e.t + "</div><div class='epx'>" + e.x + "</div><div class='eplbl'>" + e.ep + " - Click for AI insights</div>";
+    el.addEventListener("click", function() {
+      analyseIncome("This podcast episode is about: " + e.t + ". Give me the key insights and 3 actions I can take today.");
+    });
+    grid.appendChild(el);
+  });
+})();
+
+/* ---- WAITLIST ---- */
+document.getElementById("wlBtn").addEventListener("click", function() {
+  var email = document.getElementById("wlEmail").value.trim();
+  if (!email || email.indexOf("@") < 0) { alert("Please enter a valid email address."); return; }
+  document.getElementById("wlMsg").style.display = "block";
+  document.getElementById("wlEmail").value = "";
+});
+
+})();
+</script>
+</body>
+</html>
