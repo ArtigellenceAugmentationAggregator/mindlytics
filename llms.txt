@@ -1,0 +1,15 @@
+# Mindlytics
+
+> Mindlytics (https://mindlytics.xyz) is a podcast moment-recall and planning engine from Sydney, Australia. Describe a podcast moment you half-remember — it finds the exact episode and timestamp across YouTube, Spotify and Apple Podcasts, then turns it into a personalised income, tools and skills roadmap (week 1 to year 3). It also includes Bloomscroll, a time-budget feed designer: state the minutes you have, split them across topics, receive a sequenced feed ranked by real public engagement.
+
+## Key facts
+- Two moats: (1) podcast moment search with Read/Listen/Watch output and minutes filters; (2) Bloomscroll time-budget feed designer.
+- Positioning: "the only one that turns the moment into a plan." Related tools (Snipd, Flect AI, Tapesearch) stop at capture or timestamp; Mindlytics adds the plan layer.
+- Free at the core; Pro $9.99 one-time lifetime; Team $29/month; first 500 founding members lock 50% off for life.
+- 25 input languages (15 world + 10 Indian). Multimodal in and out. Browser-only; nothing stored; no ad trackers.
+- Honest-data policy: engagement counts shown only where a real public source exists, dated; income shown as ranges, never promises.
+- Sister product: https://tools.mindlytics.xyz — situation-first roadmap engine on the same underlying engine.
+- Operator: Raj Singh, Artigellence Augmentation Aggregator, ABN 83 988 690 362, Sydney. Contact: raj@artigellence.com
+
+## Pages
+- https://mindlytics.xyz/ : main site (search, bloomscroll, roadmap, pricing, FAQ, legal)
